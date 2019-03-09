@@ -1,10 +1,12 @@
-const conf = require('./config')
 const fs = require("fs")
-const filePath = conf.log_file + conf.log_name
+const conf = require('./config')
+const moment = require('moment')
 
 
-function log (data) {
-  fs.appendFile(filePath, data + '\r\n', () => {})
+function log (data, targetFile = conf.log_name) {
+  fs.appendFile(__dirname + '/' + conf.log_file + '/' + targetFile, data + moment(new Date()).format("YYYY-MM-DD HH:mm:ss") + '\n\r', () => {})
 }
-// fs.writeFileSync(filePath, 'wbs')
-module.exports = log 
+
+module.exports = {
+  log
+}

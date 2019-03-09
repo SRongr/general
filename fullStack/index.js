@@ -3,8 +3,8 @@ const url = require("url")
 const conf = require("./config")
 const fs = require("fs")
 const webLoader = require('./loader')
-const log = require("./log")
-const filterSet = require("./filterLoder")
+const log = require("./log").log
+const filterSet = require("./filterLoader")
 
 
 http.createServer((request, response) => {
@@ -20,14 +20,11 @@ http.createServer((request, response) => {
     // 请求的静态文件
     log('读取静态文件' + pathName)
     try {
-      // console.log(conf.path + pathName)
       const data = fs.readFileSync(__dirname + '/' + conf['path'] + pathName)
       response.writeHead(200)
       response.write(data)
-      // console.log('end')
       response.end()
     } catch (error) {
-      console.log(error)
       response.writeHead(404)
       response.write("<html>404 NotFound</html>")
       response.end()
@@ -40,7 +37,6 @@ http.createServer((request, response) => {
         webLoader.get(pathName)(request, response)
         // console.log('have')
       } catch (error) { // 容错处理 服务器错误报500
-        console.log(error)
         response.writeHead(500)
         response.write("<html>500</html>")
         response.end()
